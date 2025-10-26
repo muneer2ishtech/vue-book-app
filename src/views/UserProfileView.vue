@@ -33,11 +33,11 @@
         </div>
         <div class="row-alt">
           <div>Roles</div>
-          <div>{{ uzer.roles?.join(', ') }}</div>
+          <div>{{ uzer.roleNames?.join(', ') }}</div>
         </div>
         <div class="row-alt">
           <div>Language</div>
-          <div>{{ uzer.lang }}</div>
+          <div>{{ uzer.defaultLang }}</div>
         </div>
         <div class="row-alt">
           <div>Active</div>
