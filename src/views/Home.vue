@@ -3,16 +3,14 @@
     <Navbar :collapsed="collapsed" @toggle="toggle" />
     <div class="main">
       <div class="topbar">
-        <div>
-          <div class="breadcrumbs">Home</div>
-          <h1>{{ welcome }}</h1>
-        </div>
-        <div>
-          <span v-if="profileName">{{ profileName }}</span>
+        <div class="breadcrumbs">
+          <a @click.prevent="goHome" href="#">Home</a>
         </div>
       </div>
-      <div>
-        <p>Use the sidebar to navigate to Books.</p>
+      <div style="background: white; border-radius: 8px; overflow: hidden">
+        <div class="middleOfMainTileVerticallyHorizontally">
+          <h1>Welcome {{ profileName }}</h1>
+        </div>
       </div>
     </div>
   </div>
@@ -31,10 +29,5 @@ function toggle() {
 const auth = useAuthStore();
 const profileName = computed(
   () => auth.user.fullName || auth.user.full_name || ''
-);
-const welcome = computed(() =>
-  profileName.value
-    ? `Welcome ${profileName.value}`
-    : `Welcome ${auth.user.sub || auth.user.email || ''}`
 );
 </script>
