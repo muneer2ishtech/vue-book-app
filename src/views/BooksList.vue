@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue';
 import Navbar from '../components/Navbar.vue';
 import Pagination from '../components/Pagination.vue';
@@ -70,7 +70,15 @@ function toggle() {
   collapsed.value = !collapsed.value;
 }
 
-const books = ref([]);
+interface Book {
+  id?: number;
+  title?: string;
+  author?: string;
+  year?: number;
+  price?: number;
+}
+
+const books = ref<Book[]>([]);
 const page = ref(1);
 const pageSize = ref(5);
 
@@ -94,21 +102,21 @@ const pagedBooks = computed(() => {
   return books.value.slice(start, start + pageSize.value);
 });
 
-function view(id) {
+function view(id: number | string) {
   router.push({ name: 'BookView', params: { id } });
 }
-function edit(id) {
+function edit(id: number | string) {
   router.push({ name: 'BookEdit', params: { id } });
 }
 
-async function del(id) {
+async function del(id: number | string) {
   if (!confirm('Delete book ' + id + '?')) return;
   try {
     await api.delete(`/api/v1/books/${id}`);
     // delete may return 410, but axios treats non-2xx as error; if success, reload
     await load();
     alert('Deleted');
-  } catch (e) {
+  } catch (e: any) {
     if (e.response && e.response.status === 410) {
       await load();
       alert('Deleted');

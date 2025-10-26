@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import SignIn from '../views/SignIn.vue'
 import Home from '../views/Home.vue'
 import BooksList from '../views/BooksList.vue'
@@ -6,7 +7,11 @@ import BookView from '../views/BookView.vue'
 import BookEdit from '../views/BookEdit.vue'
 import { useAuthStore } from '../stores/auth'
 
-const routes = [
+interface RouteMeta {
+    requiresAuth?: boolean
+}
+
+const routes: Array<RouteRecordRaw> = [
     { path: '/signin', name: 'SignIn', component: SignIn },
     { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
     { path: '/books', name: 'Books', component: BooksList, meta: { requiresAuth: true } },
@@ -18,7 +23,7 @@ const router = createRouter({ history: createWebHistory(), routes })
 
 router.beforeEach((to, from, next) => {
     const auth = useAuthStore()
-    if (to.meta.requiresAuth && !auth.isAuthenticated) next({ name: 'SignIn' })
+    if ((to.meta as RouteMeta).requiresAuth && !auth.isAuthenticated) next({ name: 'SignIn' })
     else next()
 })
 

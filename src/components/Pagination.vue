@@ -14,14 +14,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
 const props = defineProps({ total: Number, pageSize: Number, current: Number });
 const emit = defineEmits(['update:current']);
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((props.total || 0) / (props.pageSize || 1)))
 );
-function change(n) {
+function change(n: number) {
   if (n >= 1 && n <= totalPages.value) emit('update:current', n);
 }
 </script>

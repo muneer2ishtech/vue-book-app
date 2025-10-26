@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
@@ -60,7 +60,7 @@ async function onSubmit() {
   try {
     await auth.signin({ email: form.email, password: form.password });
     router.push({ name: 'Home' });
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
     if (e.response && e.response.status === 403)
       error.value = 'Invalid credentials';

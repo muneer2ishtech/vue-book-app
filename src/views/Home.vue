@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed } from 'vue';
 import Navbar from '../components/Navbar.vue';
 import { useAuthStore } from '../stores/auth';
