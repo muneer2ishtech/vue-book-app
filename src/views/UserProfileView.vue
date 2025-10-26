@@ -63,7 +63,7 @@ const uzer = ref<any>({});
 
 const auth = useAuthStore();
 const isAdmin = computed(() => auth.isAdmin);
-const isSelf = computed(() => auth.userId === id);
+const isSelf = computed(() => String(auth.user.userId) === route.params.id);
 
 const collapsed = ref(false);
 
