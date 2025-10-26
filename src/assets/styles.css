@@ -1,6 +1,15 @@
-/* ============================
- * Base & Reset
- * ============================ */
+/* ========================= */
+/* Theme & Global Settings   */
+/* ========================= */
+:root {
+    --theme-color: #1f2937;
+    /* sidebar color */
+    --theme-color-light: #374151;
+    /* slightly lighter for hover or alternate shade */
+    --row-light: #f9fafb;
+    --row-dark: #f3f4f6;
+}
+
 html,
 body,
 #app {
@@ -11,22 +20,9 @@ body,
     color: #222;
 }
 
-/* ============================
- * Theme Colors
- * ============================ */
-:root {
-    --theme-color: #1f2937;
-    /* dark sidebar/nav color */
-    --theme-color-hover: #374151;
-    /* slightly lighter shade for hover */
-    --btn-bg: white;
-    --btn-color: #1f2937;
-    --btn-border: #ccc;
-}
-
-/* ============================
- * Layout
- * ============================ */
+/* ========================= */
+/* Layout                    */
+/* ========================= */
 .app-shell {
     display: flex;
     min-height: 100vh;
@@ -48,123 +44,6 @@ body,
     padding: 20px;
 }
 
-/* ============================
- * Buttons
- * ============================ */
-.btn {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--btn-border);
-    background: var(--btn-bg);
-    color: var(--btn-color);
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.btn:hover {
-    background-color: #e5e7eb;
-    /* subtle hover */
-}
-
-.btn-edit {
-    background-color: var(--theme-color);
-    color: white;
-    border: none;
-}
-
-.btn-edit:hover {
-    background-color: var(--theme-color-hover);
-}
-
-/* ============================
- * Tables
- * ============================ */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.table th,
-.table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-}
-
-/* ============================
- * Icons
- * ============================ */
-.icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-}
-
-/* ============================
- * Breadcrumbs
- * ============================ */
-.breadcrumbs {
-    font-size: 14px;
-    color: #6b7280;
-}
-
-.breadcrumbs a {
-    color: var(--theme-color);
-    text-decoration: none;
-}
-
-.breadcrumbs a:hover {
-    text-decoration: underline;
-}
-
-.breadcrumbs .separator {
-    margin: 0 4px;
-}
-
-/* ============================
- * Alternate Rows (flex columns)
- * ============================ */
-.row-alt {
-    display: flex;
-    /* side-by-side layout */
-    padding: 8px 16px;
-}
-
-.row-alt:nth-child(odd) {
-    background-color: #f9fafb;
-    /* light shade */
-}
-
-.row-alt:nth-child(even) {
-    background-color: #ffffff;
-    /* white */
-}
-
-.row-alt div:first-child {
-    width: 120px;
-    font-weight: 600;
-    color: var(--theme-color);
-}
-
-/* ============================
- * Topbar
- * ============================ */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: white;
-    border-radius: 8px;
-    margin-bottom: 16px;
-}
-
-/* ============================
- * Nav Items
- * ============================ */
 .nav-item {
     padding: 12px 16px;
     display: flex;
@@ -175,4 +54,194 @@ body,
 
 .nav-item:hover {
     background: rgba(255, 255, 255, 0.05);
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+/* ========================= */
+/* Buttons                   */
+/* ========================= */
+.btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    color: var(--theme-color);
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+    background: var(--theme-color-light);
+    color: white;
+}
+
+/* Icon buttons */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 16px;
+}
+
+/* ========================= */
+/* Tables (Items List)       */
+/* ========================= */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: auto;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.table th {
+    background: var(--row-light);
+    font-weight: 600;
+}
+
+.table tbody tr:nth-child(odd) {
+    background: var(--row-light);
+}
+
+.table tbody tr:nth-child(even) {
+    background: var(--row-dark);
+}
+
+/* ========================= */
+/* Responsive Table          */
+/* ========================= */
+@media (max-width: 600px) {
+
+    .table,
+    .table thead,
+    .table tbody,
+    .table th,
+    .table td,
+    .table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tbody tr {
+        margin-bottom: 12px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 8px;
+        background: white;
+    }
+
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 8px;
+        border-bottom: none;
+    }
+}
+
+/* ========================= */
+/* View Item Rows            */
+/* ========================= */
+.row-alt {
+    display: flex;
+    padding: 8px 12px;
+}
+
+.row-alt:nth-child(odd) {
+    background: var(--row-light);
+}
+
+.row-alt:nth-child(even) {
+    background: var(--row-dark);
+}
+
+.row-alt div:first-child {
+    width: 140px;
+    font-weight: 600;
+    color: var(--theme-color);
+    text-align: right;
+    padding-right: 12px;
+    flex-shrink: 0;
+}
+
+.row-alt div:last-child {
+    flex: 1;
+    text-align: left;
+}
+
+/* Mobile adjustments: stacked rows */
+@media (max-width: 480px) {
+    .row-alt {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .row-alt div:first-child {
+        text-align: left;
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .row-alt div:last-child {
+        width: 100%;
+    }
+}
+
+/* ========================= */
+/* Breadcrumbs               */
+/* ========================= */
+.breadcrumbs {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.breadcrumbs a {
+    color: var(--theme-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+    color: var(--theme-color-light);
+}
+
+.breadcrumbs span {
+    margin: 0 4px;
+}
+
+.breadcrumbs span.arrow {
+    margin: 0 6px;
+    font-weight: normal;
+    color: #9ca3af;
+}
+
+/* ========================= */
+/* Misc / spacing            */
+/* ========================= */
+.main h1,
+.main h2 {
+    margin: 0;
 }
