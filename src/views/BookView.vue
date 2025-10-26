@@ -19,23 +19,23 @@
       <!-- Book details in tabular layout with alternate row shades -->
       <div style="background: white; border-radius: 8px; overflow: hidden">
         <div class="row-alt">
-          <div>ID:</div>
+          <div>ID</div>
           <div>{{ book.id }}</div>
         </div>
         <div class="row-alt">
-          <div>Title:</div>
+          <div>Title</div>
           <div>{{ book.title }}</div>
         </div>
         <div class="row-alt">
-          <div>Author:</div>
+          <div>Author</div>
           <div>{{ book.author }}</div>
         </div>
         <div class="row-alt">
-          <div>Year:</div>
+          <div>Year</div>
           <div>{{ book.year }}</div>
         </div>
         <div class="row-alt">
-          <div>Price:</div>
+          <div>Price</div>
           <div>{{ book.price }}</div>
         </div>
       </div>
