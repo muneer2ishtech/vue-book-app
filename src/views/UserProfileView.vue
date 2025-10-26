@@ -1,87 +1,96 @@
 <template>
-  <div class="app-shell">
+  <v-app>
     <Navbar :collapsed="collapsed" @toggle="toggle" />
-    <div class="main">
-      <div class="topbar">
-        <div class="breadcrumbs">
-          <a @click.prevent="goHome" href="#">Home</a>
-          <template v-if="isAdmin">
-            <span class="separator">→</span>
-            <a @click.prevent="goUzers" href="#">Users</a>
-          </template>
-          <span class="separator">→</span>
-          <span>{{ uzer.id }}</span>
-        </div>
-      </div>
-      <div class="topbar">
-        <h2>{{ isSelf ? 'My Profile' : 'User Profile' }}</h2>
-      </div>
+    <v-main class="pa-4">
+      <v-breadcrumbs :items="breadcrumbs" />
 
-      <!-- Main Tile -->
-      <div style="background: white; border-radius: 8px; overflow: hidden">
-        <div class="row-alt">
-          <div>ID</div>
-          <div>{{ uzer.id }}</div>
-        </div>
-        <div class="row-alt">
-          <div>Email</div>
-          <div>{{ uzer.email }}</div>
-        </div>
-        <div class="row-alt">
-          <div>Full Name</div>
-          <div>{{ uzer.fullName }}</div>
-        </div>
-        <div class="row-alt">
-          <div>Roles</div>
-          <div>{{ uzer.roleNames?.join(', ') }}</div>
-        </div>
-        <div class="row-alt">
-          <div>Language</div>
-          <div>{{ uzer.defaultLang }}</div>
-        </div>
-        <div class="row-alt">
-          <div>Active</div>
-          <div>{{ uzer.isActive }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+      <v-card class="mx-auto" max-width="600">
+        <v-card-title>
+          <span class="text-h6">User Profile</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-list dense>
+            <v-list-item>
+              <v-list-item-content
+                ><v-list-item-title>ID</v-list-item-title></v-list-item-content
+              >
+              <v-list-item-content>{{ user.userId }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content
+                ><v-list-item-title
+                  >Full Name</v-list-item-title
+                ></v-list-item-content
+              >
+              <v-list-item-content>{{ user.fullName }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content
+                ><v-list-item-title
+                  >Email</v-list-item-title
+                ></v-list-item-content
+              >
+              <v-list-item-content>{{ user.email }}</v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content
+                ><v-list-item-title
+                  >Roles</v-list-item-title
+                ></v-list-item-content
+              >
+              <v-list-item-content>{{
+                user.roles?.join(', ')
+              }}</v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="secondary" @click="back"
+            ><v-icon left>mdi-arrow-left</v-icon>Back</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-main>
+  </v-app>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import api from '../services/api';
 import Navbar from '../components/Navbar.vue';
 
-const route = useRoute();
 const router = useRouter();
-
-const id = String(route.params.id);
-const uzer = ref<any>({});
-
-const auth = useAuthStore();
-const isAdmin = computed(() => auth.isAdmin);
-const isSelf = computed(() => String(auth.user.userId) === route.params.id);
-
+const route = useRoute();
 const collapsed = ref(false);
 
-const toggle = () => (collapsed.value = !collapsed.value);
+function toggle() {
+  collapsed.value = !collapsed.value;
+}
+
+const user = ref<any>({});
 
 async function load() {
   try {
-    const res = await api.get(`/api/v1/users/${id}`);
-    uzer.value = res.data;
+    const res = await api.get(`/api/v1/users/${route.params.id}`);
+    user.value = res.data;
   } catch (e) {
     console.error(e);
-    alert('Failed to load user profile');
+    alert('Failed to load user');
   }
+}
+
+function back() {
+  router.back();
 }
 
 onMounted(load);
 
-const goHome = () => router.push({ name: 'Home' });
-
-const goUzers = () => router.push({ name: 'UserProfiles' });
+const breadcrumbs = [
+  { text: 'Home', disabled: false, href: '#' },
+  { text: 'Users', disabled: false, href: '#' },
+  { text: 'View', disabled: true },
+];
 </script>

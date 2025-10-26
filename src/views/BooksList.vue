@@ -1,75 +1,52 @@
 <template>
-  <div class="app-shell">
+  <v-app>
     <Navbar :collapsed="collapsed" @toggle="toggle" />
-    <div class="main">
-      <div class="topbar">
-        <div class="breadcrumbs">
-          <a @click.prevent="goHome" href="#">Home</a>
-          <span class="separator">→</span>
-          <span>Books</span>
-        </div>
-      </div>
-      <div class="topbar">
-        <div>
-          <h2>Books</h2>
-        </div>
-        <div>
-          <button class="btn" @click="refresh">Refresh</button>
-        </div>
-      </div>
+    <v-main class="pa-4">
+      <v-breadcrumbs :items="breadcrumbs" />
 
-      <!-- Main Tile -->
-      <div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Year</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="book in pagedBooks" :key="book.id">
-              <td>{{ book.id }}</td>
-              <td>{{ book.title }}</td>
-              <td>{{ book.author }}</td>
-              <td>{{ book.year }}</td>
-              <td>{{ book.price }}</td>
-              <td>
-                <button class="icon-btn" title="View" @click="view(book.id)">
-                  👁️
-                </button>
-                <button class="icon-btn" title="Edit" @click="edit(book.id)">
-                  ✏️
-                </button>
-                <button class="icon-btn" title="Delete" @click="del(book.id)">
-                  🗑️
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <v-card>
+        <v-card-title>
+          <span class="text-h6">Books</span>
+          <v-spacer></v-spacer>
+          <v-btn @click="refresh" color="primary" icon>
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </v-card-title>
 
-        <Pagination
-          :total="books.length"
-          :pageSize="pageSize"
-          :current="page"
-          @update:current="page = $event"
-        />
-      </div>
-    </div>
-  </div>
+        <v-data-table
+          :headers="headers"
+          :items="books"
+          :items-per-page="5"
+          class="elevation-1"
+          show-select
+          :search="search"
+          item-key="id"
+        >
+          <template #top>
+            <v-text-field
+              v-model="search"
+              label="Search"
+              class="mx-4"
+            ></v-text-field>
+          </template>
+          <template #item.actions="{ item }">
+            <v-icon small class="mr-2" @click="view(item.id)">mdi-eye</v-icon>
+            <v-icon small class="mr-2" @click="edit(item.id)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon small @click="del(item.id)">mdi-delete</v-icon>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-main>
+  </v-app>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
 import Navbar from '../components/Navbar.vue';
-import Pagination from '../components/Pagination.vue';
 
 const router = useRouter();
 
@@ -88,14 +65,20 @@ interface Book {
 }
 
 const books = ref<Book[]>([]);
+const search = ref('');
 
-const page = ref(1);
-const pageSize = ref(5);
+const headers = [
+  { text: 'ID', value: 'id' },
+  { text: 'Title', value: 'title' },
+  { text: 'Author', value: 'author' },
+  { text: 'Year', value: 'year' },
+  { text: 'Price', value: 'price' },
+  { text: 'Actions', value: 'actions', sortable: false },
+];
 
 async function load() {
   try {
     const res = await api.get('/api/v1/books');
-    // If backend returns array or object
     books.value = Array.isArray(res.data) ? res.data : res.data || [];
   } catch (e) {
     console.error(e);
@@ -109,11 +92,6 @@ function refresh() {
   load();
 }
 
-const pagedBooks = computed(() => {
-  const start = (page.value - 1) * pageSize.value;
-  return books.value.slice(start, start + pageSize.value);
-});
-
 function view(id: number | string) {
   router.push({ name: 'BookView', params: { id } });
 }
@@ -126,11 +104,10 @@ async function del(id: number | string) {
   if (!confirm('Delete book ' + id + '?')) return;
   try {
     await api.delete(`/api/v1/books/${id}`);
-    // delete may return 410, but axios treats non-2xx as error; if success, reload
     await load();
     alert('Deleted');
   } catch (e: any) {
-    if (e.response && e.response.status === 410) {
+    if (e.response?.status === 410) {
       await load();
       alert('Deleted');
     } else {
@@ -139,4 +116,9 @@ async function del(id: number | string) {
     }
   }
 }
+
+const breadcrumbs = [
+  { text: 'Home', disabled: false, href: '#' },
+  { text: 'Books', disabled: true },
+];
 </script>
