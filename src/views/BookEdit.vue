@@ -3,15 +3,22 @@
     <Navbar :collapsed="collapsed" @toggle="toggle" />
     <div class="main">
       <div class="topbar">
-        <div>
-          <div class="breadcrumbs">Home -> Books -> {{ book.id }}</div>
-          <h2>Edit Book</h2>
+        <div class="breadcrumbs">
+          <a @click.prevent="goHome" href="#">Home</a>
+          <span class="separator">→</span>
+          <a @click.prevent="goBooks" href="#">Books</a>
+          <span class="separator">→</span>
+          <span>{{ book.id }}</span>
         </div>
         <div>
           <button class="btn" @click="cancel">Cancel</button>
         </div>
       </div>
-
+      <div class="topbar">
+        <div>
+          <h2>Edit Book</h2>
+        </div>
+      </div>
       <div
         style="
           background: white;
@@ -76,6 +83,7 @@ const router = useRouter();
 const id = route.params.id;
 const book = ref<any>({});
 const collapsed = ref(false);
+
 function toggle() {
   collapsed.value = !collapsed.value;
 }
@@ -95,11 +103,11 @@ onMounted(load);
 async function onSubmit() {
   try {
     await api.put(`/api/v1/books/${id}`, book.value);
-    alert('Updated');
+    alert('Updated Book successfully');
     router.push({ name: 'BookView', params: { id } });
   } catch (e) {
     console.error(e);
-    alert('Update failed');
+    alert('Update Book failed');
   }
 }
 
