@@ -66,13 +66,15 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import api from '../services/api';
 import Navbar from '../components/Navbar.vue';
 import Pagination from '../components/Pagination.vue';
-import api from '../services/api';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
 const collapsed = ref(false);
+
 function toggle() {
   collapsed.value = !collapsed.value;
 }
@@ -86,6 +88,7 @@ interface Book {
 }
 
 const books = ref<Book[]>([]);
+
 const page = ref(1);
 const pageSize = ref(5);
 
@@ -96,10 +99,12 @@ async function load() {
     books.value = Array.isArray(res.data) ? res.data : res.data || [];
   } catch (e) {
     console.error(e);
+    alert('Failed to load');
   }
 }
 
 onMounted(load);
+
 function refresh() {
   load();
 }
@@ -112,6 +117,7 @@ const pagedBooks = computed(() => {
 function view(id: number | string) {
   router.push({ name: 'BookView', params: { id } });
 }
+
 function edit(id: number | string) {
   router.push({ name: 'BookEdit', params: { id } });
 }

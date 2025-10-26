@@ -77,13 +77,15 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Navbar from '../components/Navbar.vue';
 import api from '../services/api';
+import Navbar from '../components/Navbar.vue';
 
 const route = useRoute();
 const router = useRouter();
+
 const id = route.params.id;
 const book = ref<any>({});
+
 const collapsed = ref(false);
 
 function toggle() {
