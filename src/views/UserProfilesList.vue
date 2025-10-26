@@ -27,7 +27,7 @@
               <th>Email</th>
               <th>Full Name</th>
               <th>Language</th>
-              <th>isActive</th>
+              <th>Active</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
@@ -36,7 +36,7 @@
               <td>{{ uzer.id }}</td>
               <td>{{ uzer.email }}</td>
               <td>{{ uzer.fullName }}</td>
-              <td>{{ uzer.lang }}</td>
+              <td>{{ uzer.defaultLang }}</td>
               <td>{{ uzer.isActive }}</td>
               <td>
                 <button class="icon-btn" title="View" @click="view(uzer.id)">
