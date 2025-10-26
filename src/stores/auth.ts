@@ -25,12 +25,21 @@ function parseJwt(token: string): JwtUser {
     }
 }
 
+// Checks if a JWT token is expired
+function isTokenValid(token: string): boolean {
+    if (!token) return false
+    const user = parseJwt(token)
+    if (!user.exp) return false
+    const now = Math.floor(Date.now() / 1000)
+    return user.exp > now
+}
+
 export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('jwt') || '')
     const user = ref<JwtUser>(token.value ? parseJwt(token.value) : {})
 
-    // Checks only presence of token, not expiry
-    const isAuthenticated = computed(() => !!token.value)
+    // Checks presence and expiry of token
+    const isAuthenticated = computed(() => isTokenValid(token.value))
 
     const isAdmin = computed(() => (user.value.roles || []).includes('ADMIN'))
 
