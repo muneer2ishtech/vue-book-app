@@ -13,7 +13,6 @@
           <span>{{ uzer.id }}</span>
         </div>
       </div>
-
       <div class="topbar">
         <h2>{{ isSelf ? 'My Profile' : 'User Profile' }}</h2>
       </div>
@@ -40,6 +39,10 @@
           <div>Language</div>
           <div>{{ uzer.lang }}</div>
         </div>
+        <div class="row-alt">
+          <div>Active</div>
+          <div>{{ uzer.isActive }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,22 +51,23 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Navbar from '../components/Navbar.vue';
-import api from '../services/api';
 import { useAuthStore } from '../stores/auth';
+import api from '../services/api';
+import Navbar from '../components/Navbar.vue';
 
-const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
+
 const id = String(route.params.id);
+const uzer = ref<any>({});
 
-const collapsed = ref(false);
-const toggle = () => (collapsed.value = !collapsed.value);
-
+const auth = useAuthStore();
 const isAdmin = computed(() => auth.isAdmin);
 const isSelf = computed(() => auth.userId === id);
 
-const uzer = ref<any>({});
+const collapsed = ref(false);
+
+const toggle = () => (collapsed.value = !collapsed.value);
 
 async function load() {
   try {
@@ -78,5 +82,6 @@ async function load() {
 onMounted(load);
 
 const goHome = () => router.push({ name: 'Home' });
+
 const goUzers = () => router.push({ name: 'UserProfiles' });
 </script>
