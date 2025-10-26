@@ -10,15 +10,17 @@
           <span class="separator">→</span>
           <span>{{ book.id }}</span>
         </div>
-        <div>
-          <button class="btn" @click="cancel">Cancel</button>
-        </div>
       </div>
       <div class="topbar">
         <div>
           <h2>Edit Book</h2>
         </div>
+        <div>
+          <button class="btn" @click="cancel">Cancel</button>
+        </div>
       </div>
+
+      <!-- Main Tile -->
       <div
         style="
           background: white;

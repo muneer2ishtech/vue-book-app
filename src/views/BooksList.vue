@@ -3,8 +3,14 @@
     <Navbar :collapsed="collapsed" @toggle="toggle" />
     <div class="main">
       <div class="topbar">
+        <div class="breadcrumbs">
+          <a @click.prevent="goHome" href="#">Home</a>
+          <span class="separator">→</span>
+          <span>Books</span>
+        </div>
+      </div>
+      <div class="topbar">
         <div>
-          <div class="breadcrumbs">Home -> Books</div>
           <h2>Books</h2>
         </div>
         <div>
@@ -12,6 +18,7 @@
         </div>
       </div>
 
+      <!-- Main Tile -->
       <div>
         <table class="table">
           <thead>

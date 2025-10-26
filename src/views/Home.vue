@@ -4,9 +4,11 @@
     <div class="main">
       <div class="topbar">
         <div class="breadcrumbs">
-          <a @click.prevent="goHome" href="#">Home</a>
+          <span>Home</span>
         </div>
       </div>
+
+      <!-- Main Tile -->
       <div style="background: white; border-radius: 8px; overflow: hidden">
         <div class="middleOfMainTileVerticallyHorizontally">
           <h1>Welcome {{ profileName }}</h1>

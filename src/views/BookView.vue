@@ -2,7 +2,6 @@
   <div class="app-shell">
     <Navbar :collapsed="collapsed" @toggle="toggle" />
     <div class="main">
-      <!-- Topbar with breadcrumb and Edit button -->
       <div class="topbar">
         <div class="breadcrumbs">
           <a @click.prevent="goHome" href="#">Home</a>
@@ -11,12 +10,17 @@
           <span class="separator">→</span>
           <span>{{ book.id }}</span>
         </div>
+      </div>
+      <div class="topbar">
+        <div>
+          <h2>View Book</h2>
+        </div>
         <div>
           <button class="btn btn-edit" @click="goEdit">Edit</button>
         </div>
       </div>
 
-      <!-- Book details in tabular layout with alternate row shades -->
+      <!-- Main Tile -->
       <div style="background: white; border-radius: 8px; overflow: hidden">
         <div class="row-alt">
           <div>ID</div>
