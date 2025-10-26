@@ -39,6 +39,13 @@ body,
     width: 64px;
 }
 
+/* Sidebar collapsed by default on mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 64px;
+    }
+}
+
 .main {
     flex: 1;
     padding: 20px;
@@ -59,6 +66,7 @@ body,
 .topbar {
     display: flex;
     justify-content: space-between;
+    /* keeps burger right-most */
     align-items: center;
     padding: 12px 16px;
     background: white;

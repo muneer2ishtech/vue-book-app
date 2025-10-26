@@ -1,8 +1,16 @@
 <template>
   <div :class="['sidebar', { collapsed: collapsed }]">
-    <div style="padding: 12px; display: flex; align-items: center; gap: 8px">
-      <button class="btn" @click="$emit('toggle')">☰</button>
+    <div
+      style="
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: space-between;
+      "
+    >
       <span v-if="!collapsed" style="font-weight: 700">My Books</span>
+      <button class="btn" @click="$emit('toggle')">☰</button>
     </div>
     <div style="margin-top: 12px">
       <div class="nav-item" @click="goHome">
@@ -38,20 +46,28 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
-import { ref } from 'vue';
-const props = defineProps({ collapsed: Boolean });
-const emit = defineEmits(['toggle']);
+
+const props = defineProps<{ collapsed: boolean }>();
+
 const router = useRouter();
 const auth = useAuthStore();
 
 function goHome() {
   router.push({ name: 'Home' });
 }
+
 function goBooks() {
   router.push({ name: 'Books' });
 }
+
 function logout() {
   auth.logout();
   router.push({ name: 'SignIn' });
 }
 </script>
+
+<style scoped>
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+</style>
