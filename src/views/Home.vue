@@ -11,7 +11,7 @@
       <!-- Main Tile -->
       <div style="background: white; border-radius: 8px; overflow: hidden">
         <div class="middleOfMainTileVerticallyHorizontally">
-          <h1>Welcome {{ profileName }}</h1>
+          <h1>Welcome {{ uzerFullName }}</h1>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@ function toggle() {
 }
 
 const auth = useAuthStore();
-const profileName = computed(
-  () => auth.user.fullName || auth.user.full_name || ''
+const uzerFullName = computed(
+  () => auth.user.fullName || ''
 );
 </script>
