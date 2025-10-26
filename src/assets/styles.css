@@ -1,41 +1,157 @@
-body {
+/* ============================
+ * Base & Reset
+ * ============================ */
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
     background: #f5f7fa;
-    color: #222
+    color: #222;
 }
 
+/* ============================
+ * Theme Colors
+ * ============================ */
+:root {
+    --theme-color: #1f2937;
+    /* dark sidebar/nav color */
+    --theme-color-hover: #374151;
+    /* slightly lighter shade for hover */
+    --btn-bg: white;
+    --btn-color: #1f2937;
+    --btn-border: #ccc;
+}
+
+/* ============================
+ * Layout
+ * ============================ */
 .app-shell {
     display: flex;
-    min-height: 100vh
+    min-height: 100vh;
 }
 
 .sidebar {
     width: 250px;
-    background: #1f2937;
+    background: var(--theme-color);
     color: white;
-    transition: width .2s
+    transition: width 0.2s;
 }
 
 .sidebar.collapsed {
-    width: 64px
+    width: 64px;
 }
 
 .main {
     flex: 1;
-    padding: 20px
+    padding: 20px;
 }
 
-.nav-item {
-    padding: 12px 16px;
+/* ============================
+ * Buttons
+ * ============================ */
+.btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn:hover {
+    background-color: #e5e7eb;
+    /* subtle hover */
+}
+
+.btn-edit {
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+}
+
+.btn-edit:hover {
+    background-color: var(--theme-color-hover);
+}
+
+/* ============================
+ * Tables
+ * ============================ */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ============================
+ * Icons
+ * ============================ */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+}
+
+/* ============================
+ * Breadcrumbs
+ * ============================ */
+.breadcrumbs {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.breadcrumbs a {
+    color: var(--theme-color);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumbs .separator {
+    margin: 0 4px;
+}
+
+/* ============================
+ * Alternate Rows (flex columns)
+ * ============================ */
+.row-alt {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer
+    /* side-by-side layout */
+    padding: 8px 16px;
 }
 
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.05)
+.row-alt:nth-child(odd) {
+    background-color: #f9fafb;
+    /* light shade */
 }
 
+.row-alt:nth-child(even) {
+    background-color: #ffffff;
+    /* white */
+}
+
+.row-alt div:first-child {
+    width: 120px;
+    font-weight: 600;
+    color: var(--theme-color);
+}
+
+/* ============================
+ * Topbar
+ * ============================ */
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -43,39 +159,20 @@ body {
     padding: 12px 16px;
     background: white;
     border-radius: 8px;
-    margin-bottom: 16px
+    margin-bottom: 16px;
 }
 
-.btn {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background: white;
-    cursor: pointer
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden
-}
-
-.table th,
-.table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee
-}
-
-.icon-btn {
-    background: none;
-    border: none;
+/* ============================
+ * Nav Items
+ * ============================ */
+.nav-item {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    padding: 6px
 }
 
-.breadcrumbs {
-    font-size: 14px;
-    color: #6b7280
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
 }

@@ -2,22 +2,42 @@
   <div class="app-shell">
     <Navbar :collapsed="collapsed" @toggle="toggle" />
     <div class="main">
+      <!-- Topbar with breadcrumb and Edit button -->
       <div class="topbar">
-        <div>
-          <div class="breadcrumbs">Home -> Books -> {{ book.id }}</div>
-          <h2>View Book</h2>
+        <div class="breadcrumbs">
+          <a @click.prevent="goHome" href="#">Home</a>
+          <span class="separator">→</span>
+          <a @click.prevent="goBooks" href="#">Books</a>
+          <span class="separator">→</span>
+          <span>{{ book.id }}</span>
         </div>
         <div>
-          <button class="btn" @click="goEdit">Edit</button>
+          <button class="btn btn-edit" @click="goEdit">Edit</button>
         </div>
       </div>
 
-      <div style="background: white; padding: 16px; border-radius: 8px">
-        <div><strong>ID:</strong> {{ book.id }}</div>
-        <div><strong>Title:</strong> {{ book.title }}</div>
-        <div><strong>Author:</strong> {{ book.author }}</div>
-        <div><strong>Year:</strong> {{ book.year }}</div>
-        <div><strong>Price:</strong> {{ book.price }}</div>
+      <!-- Book details in tabular layout with alternate row shades -->
+      <div style="background: white; border-radius: 8px; overflow: hidden">
+        <div class="row-alt">
+          <div>ID:</div>
+          <div>{{ book.id }}</div>
+        </div>
+        <div class="row-alt">
+          <div>Title:</div>
+          <div>{{ book.title }}</div>
+        </div>
+        <div class="row-alt">
+          <div>Author:</div>
+          <div>{{ book.author }}</div>
+        </div>
+        <div class="row-alt">
+          <div>Year:</div>
+          <div>{{ book.year }}</div>
+        </div>
+        <div class="row-alt">
+          <div>Price:</div>
+          <div>{{ book.price }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +54,7 @@ const router = useRouter();
 const id = route.params.id;
 const book = ref<any>({});
 const collapsed = ref(false);
+
 function toggle() {
   collapsed.value = !collapsed.value;
 }
@@ -49,7 +70,16 @@ async function load() {
 }
 
 onMounted(load);
+
 function goEdit() {
   router.push({ name: 'BookEdit', params: { id } });
+}
+
+function goHome() {
+  router.push({ name: 'Home' });
+}
+
+function goBooks() {
+  router.push({ name: 'Books' });
 }
 </script>
