@@ -54,7 +54,7 @@
             d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.2 0-9.5 1.6-9.5 4.9V22h19v-2.9c0-3.3-6.3-4.9-9.5-4.9z"
           />
         </svg>
-        <span v-if="!collapsed">{{ auth.user.sub }}</span>
+        <span v-if="!collapsed">{{ uzerShortName }}</span>
       </div>
 
       <div v-if="dropdownOpen" class="dropdown">
@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 
@@ -74,6 +74,15 @@ const props = defineProps<{ collapsed: boolean }>();
 
 const router = useRouter();
 const auth = useAuthStore();
+
+const uzerShortName = computed(() => {
+  if (!auth.user) return '';
+  return auth.user.firstName
+    ? auth.user.firstName
+    : auth.user.fullName
+    ? auth.user.fullName
+    : auth.user.sub;
+});
 
 const dropdownOpen = ref(false);
 const menuRef = ref<HTMLElement | null>(null);
