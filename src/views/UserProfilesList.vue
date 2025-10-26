@@ -32,14 +32,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="u in pagedUzers" :key="u.id">
-              <td>{{ u.id }}</td>
-              <td>{{ u.email }}</td>
-              <td>{{ u.fullName }}</td>
-              <td>{{ u.lang }}</td>
-              <td>{{ u.isActive }}</td>
+            <tr v-for="uzer in pagedUzers" :key="uzer.id">
+              <td>{{ uzer.id }}</td>
+              <td>{{ uzer.email }}</td>
+              <td>{{ uzer.fullName }}</td>
+              <td>{{ uzer.lang }}</td>
+              <td>{{ uzer.isActive }}</td>
               <td>
-                <button class="icon-btn" title="View" @click="view(u.id)">
+                <button class="icon-btn" title="View" @click="view(uzer.id)">
                   👁️
                 </button>
               </td>
