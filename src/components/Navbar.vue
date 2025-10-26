@@ -1,5 +1,6 @@
 <template>
   <div :class="['sidebar', { collapsed: collapsed }]">
+    <!-- Top section -->
     <div
       style="
         padding: 12px;
@@ -13,7 +14,8 @@
       <button class="btn" @click="$emit('toggle')">☰</button>
     </div>
 
-    <div style="margin-top: 12px">
+    <!-- Nav links -->
+    <div style="margin-top: 12px; flex: 1">
       <div class="nav-item" @click="goHome">
         <svg width="16" height="16" viewBox="0 0 24 24">
           <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -41,33 +43,30 @@
         </svg>
         <span v-if="!collapsed">Users</span>
       </div>
+    </div>
 
-      <div class="nav-item" @click="goMyProfile">
-        <svg width="16" height="16" viewBox="0 0 24 24">
+    <!-- Bottom user menu -->
+    <div class="user-menu" ref="menuRef">
+      <div class="user-info" @click="toggleDropdown">
+        <svg width="20" height="20" viewBox="0 0 24 24">
           <path
             fill="currentColor"
             d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.2 0-9.5 1.6-9.5 4.9V22h19v-2.9c0-3.3-6.3-4.9-9.5-4.9z"
           />
         </svg>
-        <span v-if="!collapsed">My Profile</span>
+        <span v-if="!collapsed">{{ auth.user.sub }}</span>
       </div>
-    </div>
 
-    <div style="margin-top: auto; padding: 12px">
-      <div class="nav-item" @click="logout">
-        <svg width="16" height="16" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-8v2h8v14h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-          />
-        </svg>
-        <span v-if="!collapsed">Logout</span>
+      <div v-if="dropdownOpen" class="dropdown">
+        <div class="dropdown-item" @click="goMyProfile">My Profile</div>
+        <div class="dropdown-item" @click="logout">Logout</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 
@@ -75,6 +74,9 @@ const props = defineProps<{ collapsed: boolean }>();
 
 const router = useRouter();
 const auth = useAuthStore();
+
+const dropdownOpen = ref(false);
+const menuRef = ref<HTMLElement | null>(null);
 
 function goHome() {
   router.push({ name: 'Home' });
@@ -89,17 +91,74 @@ function goUsers() {
 }
 
 function goMyProfile() {
+  dropdownOpen.value = false;
   router.push({ name: 'UserProfileView', params: { id: auth.user.userId } });
 }
 
 function logout() {
+  dropdownOpen.value = false;
   auth.logout();
   router.push({ name: 'SignIn' });
 }
+
+function toggleDropdown() {
+  dropdownOpen.value = !dropdownOpen.value;
+}
+
+// Close dropdown when clicking outside
+function handleClickOutside(event: MouseEvent) {
+  if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
+    dropdownOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+.user-menu {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown {
+  position: absolute;
+  bottom: 48px; /* above the bottom user info */
+  left: 12px;
+  background: white;
+  color: #222;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 10;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dropdown-item:hover {
+  background: #f0f0f0;
 }
 </style>
