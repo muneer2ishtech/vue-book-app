@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/books/:id/view', name: 'BookView', component: BookView, meta: { requiresAuth: true } },
     { path: '/books/:id/edit', name: 'BookEdit', component: BookEdit, meta: { requiresAuth: true } },
     { path: '/users', name: 'UserProfiles', component: UserProfilesList, meta: { requiresAuth: true, adminOnly: true } },
-    { path: '/users/:id/view', name: 'UserProfileView', component: UserProfileView, meta: { requiresAuth: true } },
+    { path: '/users/:id/view', name: 'UserProfileView', component: UserProfileView, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({ history: createWebHistory(), routes })
@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
 
     if (to.name === 'UserProfileView' && !auth.isAdmin) {
         const requestedId = String(to.params.id)
-        if (requestedId !== auth.userId) {
+        if (requestedId !== String(auth.user.userId)) {
             return next({ name: 'Home', query: { error: '403' } })
         }
     }

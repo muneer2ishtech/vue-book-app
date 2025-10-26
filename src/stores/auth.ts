@@ -4,9 +4,14 @@ import api from '../services/api'
 
 interface JwtUser {
     sub?: string
+    userId?: number
     email?: string
     fullName?: string
-    full_name?: string
+    lang?: string
+    roles?: string[]
+    iat?: number
+    exp?: number
+    issuer?: string
     [key: string]: any
 }
 
@@ -24,7 +29,10 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('jwt') || '')
     const user = ref<JwtUser>(token.value ? parseJwt(token.value) : {})
 
+    // Checks only presence of token, not expiry
     const isAuthenticated = computed(() => !!token.value)
+
+    const isAdmin = computed(() => (user.value.roles || []).includes('ADMIN'))
 
     function setToken(tkn: string) {
         token.value = tkn
@@ -45,5 +53,5 @@ export const useAuthStore = defineStore('auth', () => {
         setToken(data.access_token)
     }
 
-    return { token, user, isAuthenticated, setToken, logout, signin }
+    return { token, user, isAuthenticated, isAdmin, setToken, logout, signin }
 })
