@@ -1,72 +1,43 @@
 <template>
   <v-app>
-    <v-main class="d-flex align-center justify-center" style="height: 100vh">
-      <v-card class="pa-6" max-width="400" elevation="10">
-        <v-card-title class="justify-center text-h5"> Sign In </v-card-title>
-
+    <v-container class="fill-height" justify="center" align="center">
+      <v-card width="400">
+        <v-card-title>{{ $t('signIn') }}</v-card-title>
         <v-card-text>
-          <v-form ref="formRef" v-model="valid">
-            <v-text-field
-              v-model="username"
-              label="Username"
-              prepend-inner-icon="mdi-account"
-              :rules="[(v) => !!v || 'Username is required']"
-            />
-            <v-text-field
-              v-model="password"
-              label="Password"
-              type="password"
-              prepend-inner-icon="mdi-lock"
-              :rules="[(v) => !!v || 'Password is required']"
-            />
-            <v-checkbox v-model="rememberMe" label="Remember me" class="mt-2" />
-          </v-form>
+          <v-text-field v-model="email" :label="$t('email')" />
+          <v-text-field
+            v-model="password"
+            :label="$t('password')"
+            type="password"
+          />
         </v-card-text>
-
-        <v-card-actions class="justify-center">
-          <v-btn color="primary" @click="signin" :loading="loading" block
-            >Sign In</v-btn
-          >
+        <v-card-actions>
+          <v-btn @click="submit" color="primary">{{ $t('signIn') }}</v-btn>
         </v-card-actions>
-
-        <v-card-subtitle class="text-center mt-4">
-          <small>Forgot your password? <a href="#">Reset</a></small>
-        </v-card-subtitle>
       </v-card>
-    </v-main>
+    </v-container>
   </v-app>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import api from '../services/api';
+import { useAuthStore } from '../store';
+import { signIn } from '../services/auth.service';
 
-const router = useRouter();
-const username = ref('');
+const email = ref('');
 const password = ref('');
-const rememberMe = ref(false);
-const valid = ref(false);
-const formRef = ref(null);
-const loading = ref(false);
+const router = useRouter();
+const authStore = useAuthStore();
 
-async function signin() {
-  if (!(formRef.value as any).validate()) return;
-  loading.value = true;
+async function submit() {
   try {
-    const res = await api.post('/api/v1/auth/signin', {
-      username: username.value,
-      password: password.value,
-      rememberMe: rememberMe.value,
-    });
-    // save token and redirect
-    localStorage.setItem('authToken', res.data.token);
-    router.push({ name: 'Books' }); // redirect to default page
-  } catch (e: any) {
-    console.error(e);
-    alert(e.response?.data?.message || 'Sign in failed');
-  } finally {
-    loading.value = false;
+    const data = await signIn({ email: email.value, password: password.value });
+    authStore.setToken(data.token);
+    router.push({ path: '/dashboard' });
+  } catch (err) {
+    console.error(err);
+    alert('Login failed');
   }
 }
 </script>

@@ -1,14 +1,30 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './router'
-import vuetify from './plugins/vuetify'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import { createPinia } from 'pinia';
+import { createI18n } from 'vue-i18n';
+import messagesEn from './i18n/en.json';
+import messagesFi from './i18n/fi.json';
+import 'vuetify/styles';
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
-import { loadFonts } from './plugins/webfontloader'
-loadFonts()
+const vuetify = createVuetify({ components, directives });
 
-const app = createApp(App)
-app.use(createPinia())
-app.use(router)
-app.use(vuetify)
-app.mount('#app')
+const i18n = createI18n({
+    legacy: false,
+    locale: 'en',
+    fallbackLocale: 'en',
+    messages: {
+        en: messagesEn,
+        fi: messagesFi
+    }
+});
+
+const app = createApp(App);
+app.use(createPinia());
+app.use(router);
+app.use(vuetify);
+app.use(i18n);
+app.mount('#app');

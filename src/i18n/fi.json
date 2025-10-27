@@ -1,0 +1,18 @@
+{
+  "signIn": "Kirjaudu sisään",
+  "email": "Sähköposti",
+  "password": "Salasana",
+  "logout": "Kirjaudu ulos",
+  "books": "Kirjat",
+  "actions": "Toiminnot",
+  "view": "Näytä",
+  "edit": "Muokkaa",
+  "delete": "Poista",
+  "create": "Luo",
+  "name": "Nimi",
+  "author": "Kirjailija",
+  "year": "Vuosi",
+  "price": "Hinta",
+  "search": "Haku",
+  "darkMode": "Tumma tila"
+}

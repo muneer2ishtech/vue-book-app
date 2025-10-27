@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <Navbar :collapsed="collapsed" @toggle="toggle" />
+    <AppNav />
     <v-main class="pa-4">
-      <v-breadcrumbs :items="breadcrumbs" />
+      <AppHeader :breadcrumbs="breadcrumbs" />
 
       <v-card class="mx-auto" max-width="600">
         <v-card-title>
-          <span class="text-h6">Book Details</span>
+          <span class="text-h6">{{ book.name }}</span>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="edit"
             ><v-icon>mdi-pencil</v-icon></v-btn
@@ -24,10 +24,10 @@
             <v-list-item>
               <v-list-item-content
                 ><v-list-item-title
-                  >Title</v-list-item-title
+                  >Name</v-list-item-title
                 ></v-list-item-content
               >
-              <v-list-item-content>{{ book.title }}</v-list-item-content>
+              <v-list-item-content>{{ book.name }}</v-list-item-content>
             </v-list-item>
             <v-list-item>
               <v-list-item-content
@@ -69,44 +69,44 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import api from '../services/api';
-import Navbar from '../components/Navbar.vue';
+import { useAuthStore } from '../../store';
+import AppNav from '../../components/Layout/AppNav.vue';
+import AppHeader from '../../components/Layout/AppHeader.vue';
+import { getBookById, Book } from '../../services/book.service';
 
 const router = useRouter();
 const route = useRoute();
-const collapsed = ref(false);
+const authStore = useAuthStore();
+const token = authStore.token || '';
 
-function toggle() {
-  collapsed.value = !collapsed.value;
-}
-
-const book = ref<any>({});
-
-const bookId = route.params.id;
-
-async function load() {
-  try {
-    const res = await api.get(`/api/v1/books/${bookId}`);
-    book.value = res.data;
-  } catch (e) {
-    console.error(e);
-    alert('Failed to load book');
-  }
-}
-
-function back() {
-  router.back();
-}
-
-function edit() {
-  router.push({ name: 'BookEdit', params: { id: bookId } });
-}
-
-onMounted(load);
+const book = ref<Book>({ name: '', author: '', year: 0, price: 0 });
 
 const breadcrumbs = [
   { text: 'Home', disabled: false, href: '#' },
   { text: 'Books', disabled: false, href: '#' },
   { text: 'View', disabled: true },
 ];
+
+async function loadBook() {
+  const id = Number(route.params.id);
+  if (!id) return;
+  try {
+    const res = await getBookById(token, id);
+    book.value = res.data;
+  } catch (err) {
+    console.error(err);
+    alert('Failed to load book');
+  }
+}
+
+function back() {
+  router.push({ name: 'BooksList' });
+}
+
+function edit() {
+  const id = Number(route.params.id);
+  router.push({ name: 'BookEdit', params: { id } });
+}
+
+onMounted(loadBook);
 </script>
